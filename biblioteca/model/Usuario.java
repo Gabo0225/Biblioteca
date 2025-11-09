@@ -14,6 +14,10 @@ public class Usuario {
     private List<Prestamo> prestamos;
     private BigDecimal multas;
 
+    public int getId() {
+    return id;
+    }
+
     public Usuario(String nombre, String email) {
         if (!email.contains("@")) throw new IllegalArgumentException("Email no válido");
         this.id = CONTADOR_ID.getAndIncrement();

@@ -1,4 +1,4 @@
-package biblioteca.model;
+package model;
 
 public enum EstadoPrestamo {
     ACTIVO,

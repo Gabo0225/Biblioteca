@@ -22,16 +22,35 @@ public class BibliotecaApp {
             int op = leerInt();
             try {
                 switch (op) {
-                    case 1 -> opcionAgregarLibro();
-                    case 2 -> opcionRegistrarUsuario();
-                    case 3 -> opcionRealizarPrestamo();
-                    case 4 -> opcionDevolverLibro();
-                    case 5 -> opcionConsultarLibrosDisponibles();
-                    case 6 -> opcionConsultarPrestamosUsuario();
-                    case 7 -> opcionListarUsuariosConMultas();
-                    case 8 -> opcionTop5Libros();
-                    case 9 -> salir = true;
-                    default -> System.out.println("Opción no válida");
+                    case 1:
+                        opcionAgregarLibro();
+                        break;
+                    case 2:
+                        opcionRegistrarUsuario();
+                        break;
+                    case 3:
+                        opcionRealizarPrestamo();
+                        break;
+                    case 4:
+                        opcionDevolverLibro();
+                        break;
+                    case 5:
+                        opcionConsultarLibrosDisponibles();
+                        break;
+                    case 6:
+                        opcionConsultarPrestamosUsuario();
+                        break;
+                    case 7:
+                        opcionListarUsuariosConMultas();
+                        break;
+                    case 8:
+                        opcionTop5Libros();
+                        break;
+                    case 9:
+                        salir = true;
+                        break;
+                    default:
+                        System.out.println("Opción no válida");
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
@@ -69,19 +88,44 @@ public class BibliotecaApp {
         String titulo = sc.nextLine().trim();
         System.out.print("Autor: ");
         String autor = sc.nextLine().trim();
-        System.out.print("Año: ");
-        int anio = leerInt();
-        System.out.print("Ejemplares totales: ");
-        int ejemplares = leerInt();
+
+        int anio;
+        while (true) {
+            System.out.print("Año: ");
+            anio = leerInt();
+            if (anio <= 0) {
+                System.out.println("Año no válido. Introduce un número entero (ej. 2023).");
+                continue;
+            }
+            if (anio < 1000 || anio > 9999) {
+                System.out.println("Año fuera de rango. Usa un año válido (4 dígitos).");
+                continue;
+            }
+            break;
+        }
+
+        int ejemplares;
+        while (true) {
+            System.out.print("Ejemplares totales: ");
+            ejemplares = leerInt();
+            if (ejemplares <= 0) {
+                System.out.println("Número de ejemplares no válido. Introduce un entero mayor que 0.");
+                continue;
+            }
+            break;
+        }
+
         try {
             Libro libro = new Libro(isbn, titulo, autor, anio, ejemplares);
             biblioteca.agregarLibro(libro);
-            System.out.println("Libro agregado: " + libro.getTitulo());
+            System.out.println("Libro agregado: " + isbn + " - " + titulo);
         } catch (IllegalArgumentException e) {
             System.out.println("Error al crear libro: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error inesperado al crear libro: " + e.getMessage());
         }
     }
-
+    
     private static void opcionRegistrarUsuario() {
         System.out.print("Nombre: ");
         String nombre = sc.nextLine().trim();
@@ -97,17 +141,34 @@ public class BibliotecaApp {
     }
 
     private static void opcionRealizarPrestamo() {
+        List<Libro> disponibles = biblioteca.listarLibrosDisponibles();
+        if (disponibles.isEmpty()) {
+            System.out.println("No hay libros registrados.");
+        } else {
+            System.out.println("Libros registrados (ISBN - Título):");
+            for (Libro l : disponibles) {
+                // Muestra ISBN y título; si Libro tiene método para ejemplares disponibles, mejorar aquí.
+                System.out.println(l.getIsbn() + " - " + l.getTitulo());
+            }
+        }
+
         System.out.print("ID usuario: ");
         int userId = leerInt();
+        if (userId <= 0) {
+            System.out.println("ID inválido. Introduce un número de usuario válido.");
+            return;
+        }
         System.out.print("ISBN del libro: ");
         String isbn = sc.nextLine().trim();
         try {
             Prestamo p = biblioteca.realizarPrestamo(isbn, userId);
-            System.out.println("Préstamo realizado: " + p);
-        } catch (NumberFormatException e) {
-            System.out.println("ID inválido");
-        } catch (IllegalArgumentException | NoSuchElementException | LibroNoDisponibleException | UsuarioSinCupoException e) {
+            System.out.println("Préstamo realizado correctamente.");
+        } catch (NoSuchElementException e) {
+            System.out.println("Error al realizar préstamo: Libro o usuario no encontrado");
+        } catch (LibroNoDisponibleException | UsuarioSinCupoException e) {
             System.out.println("Error al realizar préstamo: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error inesperado: " + e.getMessage());
         }
     }
 

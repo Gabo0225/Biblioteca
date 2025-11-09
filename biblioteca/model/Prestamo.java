@@ -29,6 +29,24 @@ public class Prestamo {
         estado = EstadoPrestamo.DEVUELTO;
     }
 
-    public EstadoPrestamo getEstado() { return estado; }
-    public Libro getLibro() { return libro; }
+    // Getters
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public Libro getLibro() {
+        return libro;
+    }
+
+    public EstadoPrestamo getEstado() {
+        return estado;
+    }
+
+    public LocalDate getFechaPrestamo() {
+        return fechaPrestamo;
+    }
+
+    public LocalDate getFechaDevolucion() {
+        return fechaDevolucion;
+    }
 }

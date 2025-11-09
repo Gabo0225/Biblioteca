@@ -1,4 +1,4 @@
-package biblioteca.exceptions;
+package exceptions;
 
 public class LibroNoDisponibleException extends Exception {
     public LibroNoDisponibleException(String message) {
